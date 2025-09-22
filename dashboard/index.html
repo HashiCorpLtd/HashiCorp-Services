@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HashiCorp Ltd - Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <h1>HashiCorp Ltd</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li class="active"><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-project-diagram"></i> Projects</a></li>
+                    <li><a href="#"><i class="fas fa-tasks"></i> Services</a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> Clients</a></li>
+                    <li><a href="#"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header>
+                <div class="search-bar">
+                    <input type="text" placeholder="Search...">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="user-info">
+                    <i class="fas fa-bell"></i>
+                    <div class="user">
+                        <img src="https://via.placeholder.com/40" alt="User">
+                        <span>Admin User</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #e6f3ff;">
+                            <i class="fas fa-code" style="color: #0066cc;"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Active Projects</h3>
+                            <p class="stat-number">24</p>
+                            <p class="stat-trend positive">+12% from last month</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #e6ffe6;">
+                            <i class="fas fa-users" style="color: #00cc00;"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Clients</h3>
+                            <p class="stat-number">156</p>
+                            <p class="stat-trend positive">+8% from last month</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #fff2e6;">
+                            <i class="fas fa-tasks" style="color: #ff8c1a;"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Services</h3>
+                            <p class="stat-number">12</p>
+                            <p class="stat-trend neutral">No change</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #ffe6e6;">
+                            <i class="fas fa-chart-line" style="color: #cc0000;"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>Revenue</h3>
+                            <p class="stat-number">$2.4M</p>
+                            <p class="stat-trend positive">+15% from last month</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Projects -->
+                <div class="recent-projects">
+                    <h2>Recent Projects</h2>
+                    <div class="project-list">
+                        <!-- Project items will be dynamically loaded -->
+                    </div>
+                </div>
+
+                <!-- Activity Timeline -->
+                <div class="activity-timeline">
+                    <h2>Recent Activity</h2>
+                    <div class="timeline">
+                        <!-- Timeline items will be dynamically loaded -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
