@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - HashiCorp Services Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <main class="login-container">
+        <div class="login-card" role="region" aria-label="Login form">
+            <h1>Welcome Back</h1>
+            <p id="login-description">Please log in to access your dashboard</p>
+            
+            <form id="loginForm" aria-describedby="login-description" novalidate>
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required 
+                        aria-required="true"
+                        aria-describedby="email-error"
+                        autocomplete="email">
+                    <div class="error-message" id="email-error" role="alert" aria-live="polite"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-input-wrapper">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            required 
+                            aria-required="true"
+                            aria-describedby="password-error"
+                            autocomplete="current-password">
+                        <button 
+                            type="button" 
+                            class="password-toggle" 
+                            aria-label="Toggle password visibility"
+                            tabindex="0">
+                            <i class="far fa-eye" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="error-message" id="password-error" role="alert" aria-live="polite"></div>
+                </div>
+
+                <div class="form-group remember-me">
+                    <input 
+                        type="checkbox" 
+                        id="remember" 
+                        name="remember"
+                        aria-describedby="remember-description">
+                    <label for="remember">Remember me</label>
+                    <span id="remember-description" class="visually-hidden">
+                        Check this to stay logged in on this device
+                    </span>
+                </div>
+
+                <button 
+                    type="submit" 
+                    class="login-button" 
+                    aria-label="Log in to your account">
+                    Log In
+                </button>
+
+                <div class="form-links">
+                    <a href="#" 
+                       class="forgot-password" 
+                       aria-label="Reset your password"
+                       tabindex="0">
+                        Forgot your password?
+                    </a>
+                </div>
+            </form>
+        </div>
+    </main>
+    <script src="login.js"></script>
+</body>
+</html>
