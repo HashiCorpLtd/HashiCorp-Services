@@ -235,11 +235,14 @@ document.addEventListener('DOMContentLoaded', function() {
         strengthElement.textContent = `Password Strength: ${strengthText}`;
         strengthElement.classList.add(strengthClass);
 
+        const errorElement = document.getElementById('password-error');
         const existingStrength = document.querySelector('.password-strength');
+        
         if (existingStrength) {
             existingStrength.replaceWith(strengthElement);
         } else {
-            passwordInput.parentElement.appendChild(strengthElement);
+            // Insert after the error message element
+            errorElement.insertAdjacentElement('afterend', strengthElement);
         }
     }
 

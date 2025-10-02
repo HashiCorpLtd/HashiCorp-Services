@@ -66,15 +66,27 @@
 }
 
 .form-group input[type="email"],
-.form-group input[type="password"] {
+.form-group input[type="password"],
+.form-group input[type="text"] {
     width: 100%;
-    padding: 12px 15px;
+    padding: 14px 15px;
     border: 2px solid #e1e1e1;
     border-radius: 8px;
     font-size: 1rem;
     transition: all 0.3s ease;
     background-color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.form-group input:hover {
+    border-color: #2d3436;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.form-group input:focus {
+    border-color: #2d3436;
+    box-shadow: 0 0 0 3px rgba(45, 52, 54, 0.1);
+    outline: none;
 }
 
 /* High contrast placeholder text */
@@ -93,21 +105,55 @@
 /* Password input wrapper for toggle button */
 .password-input-wrapper {
     position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-wrapper input[type="password"],
+.password-input-wrapper input[type="text"] {
+    padding-right: 45px; /* Space for the toggle button */
 }
 
 .password-toggle {
     position: absolute;
-    right: 12px;
+    right: 10px;
     top: 50%;
     transform: translateY(-50%);
-    background: none;
+    background: rgba(45, 52, 54, 0.05);
     border: none;
-    color: #666;
+    color: #2d3436;
     cursor: pointer;
-    padding: 5px;
+    padding: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    width: 35px;
+    height: 35px;
+}
+
+.password-toggle:hover {
+    background: rgba(45, 52, 54, 0.1);
+}
+
+.password-toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(45, 52, 54, 0.2);
+}
+
+.password-toggle i {
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.password-toggle:hover i {
+    transform: scale(1.1);
+}
+
+.password-input-wrapper input:focus + .password-toggle {
+    color: #2d3436;
+    background: rgba(45, 52, 54, 0.1);
 }
 
 .password-toggle:focus {
@@ -219,11 +265,15 @@
 
 /* Password Strength Indicator */
 .password-strength {
-    margin-top: 5px;
-    padding: 5px 10px;
-    border-radius: 4px;
+    margin-top: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
     font-size: 0.85rem;
     transition: all 0.3s ease;
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 5px;
 }
 
 .password-strength.weak {
