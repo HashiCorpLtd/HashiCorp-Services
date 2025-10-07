@@ -69,6 +69,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Simulate API call
                 await new Promise(resolve => setTimeout(resolve, 1500));
                 
+                // Mark user as logged in so dashboard doesn't redirect back to login
+                try {
+                    localStorage.setItem('isLoggedIn', 'true');
+                } catch (err) {
+                    // If localStorage is unavailable, still attempt redirect
+                    console.warn('Could not access localStorage:', err);
+                }
+
                 // Redirect to dashboard on success
                 window.location.href = 'index.html';
             } catch (error) {

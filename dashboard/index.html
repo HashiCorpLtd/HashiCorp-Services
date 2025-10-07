@@ -10,100 +10,221 @@
 <body>
     <div class="container">
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="logo">
-                <h1>HashiCorp Ltd</h1>
+                <h1><i class="fas fa-cube"></i> HashiCorp Ltd</h1>
             </div>
             <nav>
-                <ul>
-                    <li class="active"><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
-                    <li><a href="#"><i class="fas fa-project-diagram"></i> Projects</a></li>
-                    <li><a href="#"><i class="fas fa-tasks"></i> Services</a></li>
-                    <li><a href="#"><i class="fas fa-users"></i> Clients</a></li>
-                    <li><a href="#"><i class="fas fa-chart-bar"></i> Analytics</a></li>
-                    <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                <ul id="sidebar-nav">
+                    <li class="nav-item active" data-route="dashboard">
+                        <a href="#/dashboard">
+                            <i class="fas fa-home"></i> 
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-route="projects">
+                        <a href="#/projects">
+                            <i class="fas fa-project-diagram"></i> 
+                            <span>Projects</span>
+                            <span class="badge" id="projects-badge">24</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-route="services">
+                        <a href="#/services">
+                            <i class="fas fa-tasks"></i> 
+                            <span>Services</span>
+                            <span class="badge" id="services-badge">12</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-route="clients">
+                        <a href="#/clients">
+                            <i class="fas fa-users"></i> 
+                            <span>Clients</span>
+                            <span class="badge" id="clients-badge">156</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-route="analytics">
+                        <a href="#/analytics">
+                            <i class="fas fa-chart-bar"></i> 
+                            <span>Analytics</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" data-route="settings">
+                        <a href="#/settings">
+                            <i class="fas fa-cog"></i> 
+                            <span>Settings</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <img src="https://via.placeholder.com/40" alt="User">
+                    <div class="user-details">
+                        <span class="user-name">Admin User</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
             <header>
-                <div class="search-bar">
-                    <input type="text" placeholder="Search...">
-                    <i class="fas fa-search"></i>
+                <div class="header-left">
+                    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="page-title" id="page-title">Dashboard</h1>
                 </div>
-                <div class="user-info">
-                    <i class="fas fa-bell"></i>
-                    <div class="user">
-                        <img src="https://via.placeholder.com/40" alt="User">
-                        <span>Admin User</span>
+                <div class="header-right">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                    <div class="user-info">
+                        <i class="fas fa-bell notification-bell"></i>
+                        <div class="user">
+                            <img src="https://via.placeholder.com/40" alt="User">
+                            <span>Admin User</span>
+                        </div>
                     </div>
                 </div>
             </header>
 
-            <!-- Dashboard Content -->
-            <div class="dashboard-content">
-                <!-- Stats Cards -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: #e6f3ff;">
-                            <i class="fas fa-code" style="color: #0066cc;"></i>
+            <!-- Dashboard Page -->
+            <section id="route-dashboard" class="page-content active">
+                <div class="dashboard-content">
+                    <!-- Stats Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #e6f3ff;">
+                                <i class="fas fa-code" style="color: #0066cc;"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>Active Projects</h3>
+                                <p class="stat-number">24</p>
+                                <p class="stat-trend positive">+12% from last month</p>
+                            </div>
                         </div>
-                        <div class="stat-details">
-                            <h3>Active Projects</h3>
-                            <p class="stat-number">24</p>
-                            <p class="stat-trend positive">+12% from last month</p>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #e6ffe6;">
+                                <i class="fas fa-users" style="color: #00cc00;"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>Clients</h3>
+                                <p class="stat-number">156</p>
+                                <p class="stat-trend positive">+8% from last month</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #fff2e6;">
+                                <i class="fas fa-tasks" style="color: #ff8c1a;"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>Services</h3>
+                                <p class="stat-number">12</p>
+                                <p class="stat-trend neutral">No change</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: #ffe6e6;">
+                                <i class="fas fa-chart-line" style="color: #cc0000;"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>Revenue</h3>
+                                <p class="stat-number">$2.4M</p>
+                                <p class="stat-trend positive">+15% from last month</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: #e6ffe6;">
-                            <i class="fas fa-users" style="color: #00cc00;"></i>
-                        </div>
-                        <div class="stat-details">
-                            <h3>Clients</h3>
-                            <p class="stat-number">156</p>
-                            <p class="stat-trend positive">+8% from last month</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: #fff2e6;">
-                            <i class="fas fa-tasks" style="color: #ff8c1a;"></i>
-                        </div>
-                        <div class="stat-details">
-                            <h3>Services</h3>
-                            <p class="stat-number">12</p>
-                            <p class="stat-trend neutral">No change</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon" style="background: #ffe6e6;">
-                            <i class="fas fa-chart-line" style="color: #cc0000;"></i>
-                        </div>
-                        <div class="stat-details">
-                            <h3>Revenue</h3>
-                            <p class="stat-number">$2.4M</p>
-                            <p class="stat-trend positive">+15% from last month</p>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Recent Projects -->
-                <div class="recent-projects">
-                    <h2>Recent Projects</h2>
-                    <div class="project-list">
-                        <!-- Project items will be dynamically loaded -->
+                    <!-- Recent Projects -->
+                    <div class="recent-projects">
+                        <h2>Recent Projects</h2>
+                        <div class="project-list" id="recent-projects-list">
+                            <!-- Project items will be dynamically loaded -->
+                        </div>
                     </div>
-                </div>
 
-                <!-- Activity Timeline -->
-                <div class="activity-timeline">
-                    <h2>Recent Activity</h2>
-                    <div class="timeline">
-                        <!-- Timeline items will be dynamically loaded -->
+                    <!-- Activity Timeline -->
+                    <div class="activity-timeline">
+                        <h2>Recent Activity</h2>
+                        <div class="timeline" id="activity-timeline">
+                            <!-- Timeline items will be dynamically loaded -->
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- Projects Page -->
+            <section id="route-projects" class="page-content">
+                <div class="page-header">
+                    <h2>Projects Management</h2>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add New Project
+                    </button>
+                </div>
+                <div class="projects-grid" id="projects-grid">
+                    <!-- Projects will be dynamically loaded -->
+                </div>
+            </section>
+
+            <!-- Services Page -->
+            <section id="route-services" class="page-content">
+                <div class="page-header">
+                    <h2>Services Overview</h2>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Service
+                    </button>
+                </div>
+                <div class="services-grid" id="services-grid">
+                    <!-- Services will be dynamically loaded -->
+                </div>
+            </section>
+
+            <!-- Clients Page -->
+            <section id="route-clients" class="page-content">
+                <div class="page-header">
+                    <h2>Client Management</h2>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Client
+                    </button>
+                </div>
+                <div class="clients-grid" id="clients-grid">
+                    <!-- Clients will be dynamically loaded -->
+                </div>
+            </section>
+
+            <!-- Analytics Page -->
+            <section id="route-analytics" class="page-content">
+                <div class="page-header">
+                    <h2>Analytics Dashboard</h2>
+                    <div class="date-filter">
+                        <select>
+                            <option>Last 7 days</option>
+                            <option>Last 30 days</option>
+                            <option>Last 3 months</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="analytics-content" id="analytics-content">
+                    <!-- Analytics will be dynamically loaded -->
+                </div>
+            </section>
+
+            <!-- Settings Page -->
+            <section id="route-settings" class="page-content">
+                <div class="page-header">
+                    <h2>Settings</h2>
+                </div>
+                <div class="settings-content" id="settings-content">
+                    <!-- Settings will be dynamically loaded -->
+                </div>
+            </section>
         </main>
     </div>
     <script src="script.js"></script>
