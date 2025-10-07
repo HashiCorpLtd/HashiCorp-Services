@@ -389,10 +389,14 @@ function performSearch(query) {
 }
 
 // Initialize application
+let router; // Make router global
+
 document.addEventListener('DOMContentLoaded', () => {
-    const router = new Router();
+    router = new Router();
     setupSearch();
     updateBadges();
+    setupAddButtonHandlers();
+    setupFormHandlers();
     
     // Add smooth animations
     document.body.style.opacity = '0';
@@ -589,3 +593,201 @@ if (window.innerWidth <= 768) {
         });
     });
 }
+
+// Modal Functions
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'flex';
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        
+        // Focus on first input
+        const firstInput = modal.querySelector('input, textarea');
+        if (firstInput) {
+            setTimeout(() => firstInput.focus(), 100);
+        }
+    }
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = 'auto';
+        
+        // Reset form
+        const form = modal.querySelector('form');
+        if (form) {
+            form.reset();
+        }
+        
+        // Hide any messages
+        const message = modal.querySelector('.modal-message');
+        if (message) {
+            message.style.display = 'none';
+        }
+        
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+}
+
+function showModalMessage(modalId, type, text) {
+    const modal = document.getElementById(modalId);
+    const message = modal.querySelector('.modal-message');
+    if (message) {
+        message.className = `modal-message ${type}`;
+        message.textContent = text;
+        message.style.display = 'block';
+        
+        // Auto hide success messages
+        if (type === 'success') {
+            setTimeout(() => {
+                message.style.display = 'none';
+                closeModal(modalId);
+            }, 2000);
+        }
+    }
+}
+
+// Add Button Event Handlers
+function setupAddButtonHandlers() {
+    // Add Project Button
+    const addProjectBtn = document.getElementById('add-project-btn');
+    if (addProjectBtn) {
+        addProjectBtn.addEventListener('click', () => {
+            openModal('add-project-modal');
+        });
+    }
+
+    // Add Service Button
+    const addServiceBtn = document.getElementById('add-service-btn');
+    if (addServiceBtn) {
+        addServiceBtn.addEventListener('click', () => {
+            openModal('add-service-modal');
+        });
+    }
+
+    // Add Client Button
+    const addClientBtn = document.getElementById('add-client-btn');
+    if (addClientBtn) {
+        addClientBtn.addEventListener('click', () => {
+            openModal('add-client-modal');
+        });
+    }
+}
+
+// Form Submission Handlers
+function setupFormHandlers() {
+    // Add Project Form
+    const addProjectForm = document.getElementById('add-project-form');
+    if (addProjectForm) {
+        addProjectForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(addProjectForm);
+            const projectData = {
+                id: sampleData.projects.length + 1,
+                name: formData.get('name'),
+                client: formData.get('client'),
+                progress: 0,
+                status: 'Planning',
+                deadline: formData.get('deadline'),
+                description: formData.get('description')
+            };
+            
+            // Add to sample data
+            sampleData.projects.push(projectData);
+            
+            // Update UI
+            router.populateProjects();
+            updateProjectsBadge();
+            
+            showModalMessage('add-project-modal', 'success', 'Project added successfully!');
+        });
+    }
+
+    // Add Service Form
+    const addServiceForm = document.getElementById('add-service-form');
+    if (addServiceForm) {
+        addServiceForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(addServiceForm);
+            const serviceData = {
+                id: sampleData.services.length + 1,
+                name: formData.get('name'),
+                description: formData.get('description'),
+                clients: 0,
+                revenue: formData.get('price') || '$0'
+            };
+            
+            // Add to sample data
+            sampleData.services.push(serviceData);
+            
+            // Update UI
+            router.populateServices();
+            updateServicesBadge();
+            
+            showModalMessage('add-service-modal', 'success', 'Service added successfully!');
+        });
+    }
+
+    // Add Client Form
+    const addClientForm = document.getElementById('add-client-form');
+    if (addClientForm) {
+        addClientForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(addClientForm);
+            const clientData = {
+                id: sampleData.clients.length + 1,
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                contact: formData.get('contact'),
+                projects: 0,
+                revenue: '$0',
+                status: 'Active'
+            };
+            
+            // Add to sample data
+            sampleData.clients.push(clientData);
+            
+            // Update UI
+            router.populateClients();
+            updateClientsBadge();
+            
+            showModalMessage('add-client-modal', 'success', 'Client added successfully!');
+        });
+    }
+}
+
+// Update Badge Functions
+function updateProjectsBadge() {
+    const badge = document.getElementById('projects-badge');
+    if (badge) {
+        badge.textContent = sampleData.projects.length;
+    }
+}
+
+function updateServicesBadge() {
+    const badge = document.getElementById('services-badge');
+    if (badge) {
+        badge.textContent = sampleData.services.length;
+    }
+}
+
+function updateClientsBadge() {
+    const badge = document.getElementById('clients-badge');
+    if (badge) {
+        badge.textContent = sampleData.clients.length;
+    }
+}
+
+// Close modal when clicking outside
+window.addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal')) {
+        const modalId = e.target.id;
+        closeModal(modalId);
+    }
+});
