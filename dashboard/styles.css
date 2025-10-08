@@ -9,11 +9,16 @@ body {
     background: #f5f6fa;
     color: #2f3640;
     line-height: 1.6;
+    padding-top: 60px; /* Height of the navbar */
 }
 
 .container {
     display: flex;
-    height: 100vh;
+    min-height: calc(100vh - 60px);
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem;
 }
 
 /* Sidebar Styles */
