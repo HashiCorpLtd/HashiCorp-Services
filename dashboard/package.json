@@ -1,0 +1,38 @@
+{
+  "name": "hashicorp-services-dashboard",
+  "version": "1.0.0",
+  "description": "A secure web application with role-based authentication for HashiCorp Ltd, featuring separate admin and user dashboards",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 3000",
+    "dev": "python -m http.server 3001",
+    "serve": "python -m http.server"
+  },
+  "keywords": [
+    "dashboard",
+    "authentication",
+    "admin-panel",
+    "hashicorp",
+    "responsive",
+    "web-application",
+    "role-based-access"
+  ],
+  "author": "Satyam P",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SatyamP45/HashiCorp-Services.git"
+  },
+  "homepage": "https://github.com/SatyamP45/HashiCorp-Services#readme",
+  "bugs": {
+    "url": "https://github.com/SatyamP45/HashiCorp-Services/issues"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

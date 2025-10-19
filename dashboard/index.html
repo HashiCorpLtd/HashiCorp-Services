@@ -3,335 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HashiCorp Ltd - Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="navbar.css">
+    <title>HashiCorp Ltd - Redirecting...</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2533 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .redirect-container {
+            text-align: center;
+            max-width: 500px;
+            padding: 3rem 2rem;
+            background: rgba(26, 37, 51, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .logo i {
+            font-size: 3rem;
+            color: #007bff;
+            filter: drop-shadow(0 2px 10px rgba(0, 123, 255, 0.3));
+        }
+        
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .security-icon {
+            font-size: 4rem;
+            color: #007bff;
+            margin-bottom: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+        
+        h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+        
+        p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .loading {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #007bff;
+            font-weight: 500;
+        }
+        
+        .loading i {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .manual-link {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .manual-link a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border: 1px solid #007bff;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .manual-link a:hover {
+            background: #007bff;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <!-- Side Navigation -->
-    <aside class="sidebar" id="sidebar">
+    <div class="redirect-container">
         <div class="logo">
-            <h1><i class="fas fa-cube"></i> HashiCorp Ltd</h1>
+            <i class="fas fa-cube"></i>
+            <h1>HashiCorp Ltd</h1>
         </div>
-        <nav>
-            <ul id="sidebar-nav">
-                <li class="nav-item active" data-route="dashboard">
-                    <a href="#/dashboard">
-                        <i class="fas fa-home"></i> 
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-route="projects">
-                    <a href="#/projects">
-                        <i class="fas fa-project-diagram"></i> 
-                        <span>Projects</span>
-                        <span class="badge" id="projects-badge">24</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-route="services">
-                    <a href="#/services">
-                        <i class="fas fa-tasks"></i> 
-                        <span>Services</span>
-                        <span class="badge" id="services-badge">12</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-route="clients">
-                    <a href="#/clients">
-                        <i class="fas fa-users"></i> 
-                        <span>Clients</span>
-                        <span class="badge" id="clients-badge">156</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-route="analytics">
-                    <a href="#/analytics">
-                        <i class="fas fa-chart-bar"></i> 
-                        <span>Analytics</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-route="settings">
-                    <a href="#/settings">
-                        <i class="fas fa-cog"></i> 
-                        <span>Settings</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
-
-    <!-- Top Navigation Bar -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <button class="sidebar-toggle" id="sidebar-toggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="search-bar">
-                <span class="search-icon">🔍</span>
-                <input type="text" placeholder="Search projects, clients, services..." id="search-input">
-                <div class="search-results" id="search-results"></div>
-            </div>
-            <div class="navbar-right">
-                <div class="nav-icons">
-                    <a href="#" class="nav-icon" title="Notifications">
-                        <i class="far fa-bell"></i>
-                        <span class="badge">3</span>
-                    </a>
-                    <a href="#" class="nav-icon" title="Settings">
-                        <i class="fas fa-cog"></i>
-                        <span class="badge">2</span>
-                    </a>
-                </div>
-                <div class="user-menu">
-                    <div class="user-profile">
-                        <img src="https://via.placeholder.com/40" alt="User Avatar" class="user-avatar">
-                    </div>
-                </div>
-            </div>
+        
+        <div class="security-icon">
+            <i class="fas fa-shield-alt"></i>
         </div>
-    </nav>
-
-    <div class="container">
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="content-wrapper">
-                <!-- Your existing main content here -->
-
-            <!-- Dashboard Page -->
-            <section id="route-dashboard" class="page-content active">
-                <div class="dashboard-content">
-                    <!-- Stats Cards -->
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-icon" style="background: #e6f3ff;">
-                                <i class="fas fa-code" style="color: #0066cc;"></i>
-                            </div>
-                            <div class="stat-details">
-                                <h3>Active Projects</h3>
-                                <p class="stat-number">24</p>
-                                <p class="stat-trend positive">+12% from last month</p>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon" style="background: #e6ffe6;">
-                                <i class="fas fa-users" style="color: #00cc00;"></i>
-                            </div>
-                            <div class="stat-details">
-                                <h3>Clients</h3>
-                                <p class="stat-number">156</p>
-                                <p class="stat-trend positive">+8% from last month</p>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon" style="background: #fff2e6;">
-                                <i class="fas fa-tasks" style="color: #ff8c1a;"></i>
-                            </div>
-                            <div class="stat-details">
-                                <h3>Services</h3>
-                                <p class="stat-number">12</p>
-                                <p class="stat-trend neutral">No change</p>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-icon" style="background: #ffe6e6;">
-                                <i class="fas fa-chart-line" style="color: #cc0000;"></i>
-                            </div>
-                            <div class="stat-details">
-                                <h3>Revenue</h3>
-                                <p class="stat-number">$2.4M</p>
-                                <p class="stat-trend positive">+15% from last month</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Recent Projects -->
-                    <div class="recent-projects">
-                        <h2>Recent Projects</h2>
-                        <div class="project-list" id="recent-projects-list">
-                            <!-- Project items will be dynamically loaded -->
-                        </div>
-                    </div>
-
-                    <!-- Activity Timeline -->
-                    <div class="activity-timeline">
-                        <h2>Recent Activity</h2>
-                        <div class="timeline" id="activity-timeline">
-                            <!-- Timeline items will be dynamically loaded -->
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Projects Page -->
-            <section id="route-projects" class="page-content">
-                <div class="page-header">
-                    <h2>Projects Management</h2>
-                    <button class="btn btn-primary" id="add-project-btn">
-                        <i class="fas fa-plus"></i> Add New Project
-                    </button>
-                </div>
-                <div class="projects-grid" id="projects-grid">
-                    <!-- Projects will be dynamically loaded -->
-                </div>
-            </section>
-
-            <!-- Services Page -->
-            <section id="route-services" class="page-content">
-                <div class="page-header">
-                    <h2>Services Overview</h2>
-                    <button class="btn btn-primary" id="add-service-btn">
-                        <i class="fas fa-plus"></i> Add Service
-                    </button>
-                </div>
-                <div class="services-grid" id="services-grid">
-                    <!-- Services will be dynamically loaded -->
-                </div>
-            </section>
-
-            <!-- Clients Page -->
-            <section id="route-clients" class="page-content">
-                <div class="page-header">
-                    <h2>Client Management</h2>
-                    <button class="btn btn-primary" id="add-client-btn">
-                        <i class="fas fa-plus"></i> Add Client
-                    </button>
-                </div>
-                <div class="clients-grid" id="clients-grid">
-                    <!-- Clients will be dynamically loaded -->
-                </div>
-            </section>
-
-            <!-- Analytics Page -->
-            <section id="route-analytics" class="page-content">
-                <div class="page-header">
-                    <h2>Analytics Dashboard</h2>
-                    <div class="date-filter">
-                        <select>
-                            <option>Last 7 days</option>
-                            <option>Last 30 days</option>
-                            <option>Last 3 months</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="analytics-content" id="analytics-content">
-                    <!-- Analytics will be dynamically loaded -->
-                </div>
-            </section>
-
-            <!-- Settings Page -->
-            <section id="route-settings" class="page-content">
-                <div class="page-header">
-                    <h2>Settings</h2>
-                </div>
-                <div class="settings-content" id="settings-content">
-                    <!-- Settings will be dynamically loaded -->
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <!-- Modal for Adding Projects -->
-    <div id="add-project-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add New Project</h3>
-                <span class="modal-close" onclick="closeModal('add-project-modal')">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="modal-message"></div>
-                <form id="add-project-form">
-                    <div class="form-group">
-                        <label for="project-name">Project Name:</label>
-                        <input type="text" id="project-name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="project-client">Client:</label>
-                        <input type="text" id="project-client" name="client" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="project-deadline">Deadline:</label>
-                        <input type="date" id="project-deadline" name="deadline" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="project-description">Description:</label>
-                        <textarea id="project-description" name="description" rows="3"></textarea>
-                    </div>
-                    <div class="modal-actions">
-                        <button type="button" class="btn btn-secondary" onclick="closeModal('add-project-modal')">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Add Project</button>
-                    </div>
-                </form>
-            </div>
+        
+        <h2>Secure Access Required</h2>
+        <p>This is a protected area. You will be redirected to the secure login page to authenticate your access.</p>
+        
+        <div class="loading">
+            <i class="fas fa-spinner"></i>
+            <span id="status">Redirecting to secure login...</span>
+        </div>
+        
+        <div class="manual-link">
+            <p>If you are not redirected automatically:</p>
+            <a href="login.html">Click here to login</a>
         </div>
     </div>
 
-    <!-- Modal for Adding Services -->
-    <div id="add-service-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add New Service</h3>
-                <span class="modal-close" onclick="closeModal('add-service-modal')">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="modal-message"></div>
-                <form id="add-service-form">
-                    <div class="form-group">
-                        <label for="service-name">Service Name:</label>
-                        <input type="text" id="service-name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="service-description">Description:</label>
-                        <textarea id="service-description" name="description" rows="3" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="service-price">Price Range:</label>
-                        <input type="text" id="service-price" name="price" placeholder="e.g., $500-$2000">
-                    </div>
-                    <div class="modal-actions">
-                        <button type="button" class="btn btn-secondary" onclick="closeModal('add-service-modal')">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Add Service</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal for Adding Clients -->
-    <div id="add-client-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add New Client</h3>
-                <span class="modal-close" onclick="closeModal('add-client-modal')">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="modal-message"></div>
-                <form id="add-client-form">
-                    <div class="form-group">
-                        <label for="client-name">Company Name:</label>
-                        <input type="text" id="client-name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="client-email">Email:</label>
-                        <input type="email" id="client-email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="client-phone">Phone:</label>
-                        <input type="tel" id="client-phone" name="phone">
-                    </div>
-                    <div class="form-group">
-                        <label for="client-contact">Contact Person:</label>
-                        <input type="text" id="client-contact" name="contact">
-                    </div>
-                    <div class="modal-actions">
-                        <button type="button" class="btn btn-secondary" onclick="closeModal('add-client-modal')">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Add Client</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-    <script src="navbar.js"></script>
+    <script>
+        console.log('Index page loaded, starting redirect process...');
+        
+        // Clear any existing session data
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        localStorage.removeItem('userToken');
+        localStorage.removeItem('userUser');
+        sessionStorage.clear();
+        console.log('Session data cleared');
+        
+        // Update status message
+        let countdown = 3;
+        const statusElement = document.getElementById('status');
+        
+        const updateStatus = () => {
+            statusElement.textContent = `Redirecting in ${countdown} seconds...`;
+            countdown--;
+            
+            if (countdown < 0) {
+                statusElement.textContent = 'Redirecting now...';
+                console.log('Redirecting to login.html');
+                window.location.href = 'login.html';
+            }
+        };
+        
+        // Start countdown immediately
+        updateStatus();
+        const interval = setInterval(updateStatus, 1000);
+        
+        // Fallback redirect after 5 seconds
+        setTimeout(() => {
+            console.log('Fallback redirect triggered');
+            clearInterval(interval);
+            window.location.href = 'login.html';
+        }, 5000);
+        
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                console.log('Page became visible, ensuring redirect...');
+                setTimeout(() => {
+                    if (window.location.pathname.includes('index.html')) {
+                        window.location.href = 'login.html';
+                    }
+                }, 1000);
+            }
+        });
+    </script>
 </body>
 </html>

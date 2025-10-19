@@ -3,83 +3,499 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - HashiCorp Services Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="login.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Login - HashiCorp Ltd</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta name="description" content="Login portal for HashiCorp Services - Choose your login type">
+    <style>
+        /* Minimal CSS for clean functionality */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2533 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background: rgba(26, 37, 51, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo i {
+            font-size: 3rem;
+            color: #007bff;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #007bff;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 123, 255, 0.3);
+        }
+        
+        .login-button:active {
+            transform: translateY(0);
+        }
+        
+        .login-options {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .option-button {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .option-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .option-button.active {
+            background: #007bff;
+            border-color: #007bff;
+        }
+        
+        .form-section {
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        .back-button {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .success-message {
+            color: #28a745;
+            font-size: 14px;
+            margin-top: 5px;
+            text-align: center;
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            color: #007bff;
+            margin-top: 20px;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .loading i {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+            
+            .option-button {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <main class="login-container">
-        <div class="login-card" role="region" aria-label="Login form">
-            <h1>Welcome Back</h1>
-            <p id="login-description">Please log in to access your dashboard</p>
+    <div class="login-container">
+        <!-- Login Selection -->
+        <div id="login-selection" class="form-section active">
+            <div class="logo">
+                <i class="fas fa-cube"></i>
+                <h1>HashiCorp Ltd</h1>
+            </div>
             
-            <form id="loginForm" aria-describedby="login-description" novalidate>
-                <div class="form-group">
-                    <label for="email">Email address</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
-                        required 
-                        aria-required="true"
-                        aria-describedby="email-error"
-                        autocomplete="email">
-                    <div class="error-message" id="email-error" role="alert" aria-live="polite"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <div class="password-input-wrapper">
-                        <input 
-                            type="password" 
-                            id="password" 
-                            name="password" 
-                            required 
-                            aria-required="true"
-                            aria-describedby="password-error"
-                            autocomplete="current-password">
-                        <button 
-                            type="button" 
-                            class="password-toggle" 
-                            aria-label="Toggle password visibility"
-                            tabindex="0">
-                            <i class="far fa-eye" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                    <div class="error-message" id="password-error" role="alert" aria-live="polite"></div>
-                </div>
-
-                <div class="form-group remember-me">
-                    <input 
-                        type="checkbox" 
-                        id="remember" 
-                        name="remember"
-                        aria-describedby="remember-description">
-                    <label for="remember">Remember me</label>
-                    <span id="remember-description" class="visually-hidden">
-                        Check this to stay logged in on this device
-                    </span>
-                </div>
-
-                <button 
-                    type="submit" 
-                    class="login-button" 
-                    aria-label="Log in to your account">
-                    Log In
+            <div class="login-options">
+                <button class="option-button" onclick="showAdminLogin()">
+                    <i class="fas fa-user-shield"></i> Admin Login
                 </button>
-
-                <div class="form-links">
-                    <a href="#" 
-                       class="forgot-password" 
-                       aria-label="Reset your password"
-                       tabindex="0">
-                        Forgot your password?
-                    </a>
+                <button class="option-button" onclick="showUserLogin()">
+                    <i class="fas fa-user"></i> User Login
+                </button>
+            </div>
+        </div>
+        
+        <!-- Admin Login Form -->
+        <div id="admin-login" class="form-section">
+            <button class="back-button" onclick="showSelection()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            
+            <div class="logo">
+                <i class="fas fa-user-shield"></i>
+                <h1>Admin Login</h1>
+            </div>
+            
+            <form onsubmit="return handleAdminLogin(event)">
+                <div class="form-group">
+                    <label for="admin-username">Username</label>
+                    <input type="text" id="admin-username" class="form-input" placeholder="Enter admin username" required>
+                    <div class="error-message" id="admin-username-error"></div>
                 </div>
+                
+                <div class="form-group">
+                    <label for="admin-password">Password</label>
+                    <input type="password" id="admin-password" class="form-input" placeholder="Enter admin password" required>
+                    <div class="error-message" id="admin-password-error"></div>
+                </div>
+                
+                <button type="submit" class="login-button">
+                    <i class="fas fa-sign-in-alt"></i> Login as Admin
+                </button>
+                
+                <div class="loading" id="admin-loading">
+                    <i class="fas fa-spinner"></i> Authenticating...
+                </div>
+                
+                <div class="success-message" id="admin-success"></div>
             </form>
         </div>
-    </main>
-    <script src="login.js"></script>
+        
+        <!-- User Login Form -->
+        <div id="user-login" class="form-section">
+            <button class="back-button" onclick="showSelection()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            
+            <div class="logo">
+                <i class="fas fa-user"></i>
+                <h1>User Login</h1>
+            </div>
+            
+            <form onsubmit="return handleUserLogin(event)">
+                <div class="form-group">
+                    <label for="user-username">Username</label>
+                    <input type="text" id="user-username" class="form-input" placeholder="Enter username" required>
+                    <div class="error-message" id="user-username-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="user-password">Password</label>
+                    <input type="password" id="user-password" class="form-input" placeholder="Enter password" required>
+                    <div class="error-message" id="user-password-error"></div>
+                </div>
+                
+                <button type="submit" class="login-button">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                
+                <div class="loading" id="user-loading">
+                    <i class="fas fa-spinner"></i> Authenticating...
+                </div>
+                
+                <div class="success-message" id="user-success"></div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Session management
+        function setSession(userType, username) {
+            const sessionData = {
+                userType: userType,
+                username: username,
+                loginTime: Date.now().toString(),
+                token: generateToken()
+            };
+            
+            // Set data in both localStorage and sessionStorage for compatibility
+            localStorage.setItem(`${userType}Token`, sessionData.token);
+            localStorage.setItem(`${userType}User`, JSON.stringify(sessionData));
+            sessionStorage.setItem('currentUser', JSON.stringify(sessionData));
+            
+            // Set specific keys for admin dashboard compatibility
+            if (userType === 'admin') {
+                sessionStorage.setItem('adminToken', sessionData.token);
+                sessionStorage.setItem('loginTime', sessionData.loginTime);
+                sessionStorage.setItem('adminUser', JSON.stringify(sessionData));
+            } else if (userType === 'user') {
+                sessionStorage.setItem('userToken', sessionData.token);
+                sessionStorage.setItem('loginTime', sessionData.loginTime);
+                sessionStorage.setItem('userUser', JSON.stringify(sessionData));
+            }
+        }
+        
+        function generateToken() {
+            return 'token_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+        }
+        
+        function showLoading(type) {
+            document.getElementById(`${type}-loading`).classList.add('show');
+        }
+        
+        function hideLoading(type) {
+            document.getElementById(`${type}-loading`).classList.remove('show');
+        }
+        
+        function showSuccess(type, message) {
+            const successEl = document.getElementById(`${type}-success`);
+            successEl.textContent = message;
+            successEl.classList.add('show');
+        }
+        
+        function showError(field, message) {
+            const errorEl = document.getElementById(`${field}-error`);
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+        }
+        
+        function clearErrors() {
+            const errors = document.querySelectorAll('.error-message');
+            errors.forEach(error => {
+                error.classList.remove('show');
+                error.textContent = '';
+            });
+            
+            const success = document.querySelectorAll('.success-message');
+            success.forEach(msg => {
+                msg.classList.remove('show');
+                msg.textContent = '';
+            });
+        }
+        
+        function showSelection() {
+            clearErrors();
+            hideLoading('admin');
+            hideLoading('user');
+            document.getElementById('login-selection').classList.add('active');
+            document.getElementById('admin-login').classList.remove('active');
+            document.getElementById('user-login').classList.remove('active');
+        }
+        
+        function showAdminLogin() {
+            clearErrors();
+            document.getElementById('login-selection').classList.remove('active');
+            document.getElementById('admin-login').classList.add('active');
+            document.getElementById('user-login').classList.remove('active');
+            document.getElementById('admin-username').focus();
+        }
+        
+        function showUserLogin() {
+            clearErrors();
+            document.getElementById('login-selection').classList.remove('active');
+            document.getElementById('admin-login').classList.remove('active');
+            document.getElementById('user-login').classList.add('active');
+            document.getElementById('user-username').focus();
+        }
+        
+        function handleAdminLogin(event) {
+            event.preventDefault();
+            clearErrors();
+            
+            const username = document.getElementById('admin-username').value.trim();
+            const password = document.getElementById('admin-password').value;
+            
+            // Validation
+            if (!username) {
+                showError('admin-username', 'Username is required');
+                return false;
+            }
+            
+            if (!password) {
+                showError('admin-password', 'Password is required');
+                return false;
+            }
+            
+            showLoading('admin');
+            
+            // Simulate authentication delay
+            setTimeout(() => {
+                hideLoading('admin');
+                
+                if (username === 'admin' && password === 'admin123') {
+                    setSession('admin', username);
+                    showSuccess('admin', 'Login successful! Redirecting...');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'admin-dashboard.html';
+                    }, 1500);
+                } else {
+                    showError('admin-username', 'Invalid credentials');
+                    showError('admin-password', 'Please check your username and password');
+                }
+            }, 1000);
+            
+            return false;
+        }
+        
+        function handleUserLogin(event) {
+            event.preventDefault();
+            clearErrors();
+            
+            const username = document.getElementById('user-username').value.trim();
+            const password = document.getElementById('user-password').value;
+            
+            // Validation
+            if (!username) {
+                showError('user-username', 'Username is required');
+                return false;
+            }
+            
+            if (!password) {
+                showError('user-password', 'Password is required');
+                return false;
+            }
+            
+            showLoading('user');
+            
+            // Simulate authentication delay
+            setTimeout(() => {
+                hideLoading('user');
+                
+                if (username === 'user' && password === 'user123') {
+                    setSession('user', username);
+                    showSuccess('user', 'Login successful! Redirecting...');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1500);
+                } else {
+                    showError('user-username', 'Invalid credentials');
+                    showError('user-password', 'Please check your username and password');
+                }
+            }, 1000);
+            
+            return false;
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Minimal login page loaded successfully');
+            
+            // Clear any existing sessions
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            localStorage.removeItem('userToken');
+            localStorage.removeItem('userUser');
+            sessionStorage.clear();
+        });
+    </script>
 </body>
 </html>
