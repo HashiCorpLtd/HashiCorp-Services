@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - HashiCorp Ltd</title>
+    <link rel="stylesheet" href="admin-login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <meta name="description" content="Secure admin login portal for HashiCorp Services dashboard">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <!-- Left Side: Brand Section -->
+            <div class="brand-section">
+                <div class="brand-content">
+                    <div class="logo">
+                        <i class="fas fa-cube" aria-hidden="true"></i>
+                        <h1>HashiCorp Ltd</h1>
+                    </div>
+                    <div class="welcome-content">
+                        <h2>Welcome Back</h2>
+                        <p>Sign in to access your admin dashboard and manage your HashiCorp services with enterprise-grade security.</p>
+                        <div class="features">
+                            <div class="feature-item">
+                                <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                                <span>Secure Authentication</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-chart-line" aria-hidden="true"></i>
+                                <span>Advanced Analytics</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-users-cog" aria-hidden="true"></i>
+                                <span>User Management</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Login Form -->
+            <div class="form-section">
+                <div class="form-container">
+                    <div class="form-header">
+                        <h2>Admin Sign In</h2>
+                        <p>Enter your credentials to access the admin panel</p>
+                    </div>
+
+                    <!-- Error/Success Messages -->
+                    <div class="message-container" id="message-container" role="alert" aria-live="polite"></div>
+
+                    <form class="login-form" id="admin-login-form" novalidate>
+                        <!-- Email Field -->
+                        <div class="form-group">
+                            <label for="email" class="form-label">
+                                <i class="fas fa-envelope" aria-hidden="true"></i>
+                                Email Address
+                            </label>
+                            <div class="input-container">
+                                <input 
+                                    type="email" 
+                                    id="email" 
+                                    name="email" 
+                                    class="form-input" 
+                                    placeholder="admin@hashicorp.com"
+                                    autocomplete="email"
+                                    required
+                                    aria-describedby="email-error"
+                                >
+                                <div class="input-icon">
+                                    <i class="fas fa-envelope" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                            <div class="error-message" id="email-error" role="alert"></div>
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="form-group">
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock" aria-hidden="true"></i>
+                                Password
+                            </label>
+                            <div class="input-container">
+                                <input 
+                                    type="password" 
+                                    id="password" 
+                                    name="password" 
+                                    class="form-input" 
+                                    placeholder="Enter your password"
+                                    autocomplete="current-password"
+                                    required
+                                    aria-describedby="password-error"
+                                >
+                                <div class="input-icon">
+                                    <i class="fas fa-lock" aria-hidden="true"></i>
+                                </div>
+                                <button 
+                                    type="button" 
+                                    class="password-toggle" 
+                                    id="password-toggle"
+                                    aria-label="Toggle password visibility"
+                                    tabindex="0"
+                                >
+                                    <i class="fas fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="error-message" id="password-error" role="alert"></div>
+                        </div>
+
+                        <!-- Remember Me & Forgot Password -->
+                        <div class="form-options">
+                            <div class="checkbox-container">
+                                <input 
+                                    type="checkbox" 
+                                    id="remember-me" 
+                                    name="remember-me" 
+                                    class="checkbox"
+                                >
+                                <label for="remember-me" class="checkbox-label">
+                                    <span class="checkbox-custom"></span>
+                                    Remember me for 30 days
+                                </label>
+                            </div>
+                            <a href="#forgot-password" class="forgot-password-link" id="forgot-password-link">
+                                Forgot Password?
+                            </a>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button 
+                            type="submit" 
+                            class="submit-button" 
+                            id="submit-button"
+                            aria-describedby="submit-status"
+                        >
+                            <span class="button-text">Sign In</span>
+                            <span class="button-loader" aria-hidden="true">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </span>
+                        </button>
+                        <div id="submit-status" class="sr-only" aria-live="polite"></div>
+                    </form>
+
+                    <!-- Support & Additional Links -->
+                    <div class="form-footer">
+                        <div class="support-links">
+                            <a href="#contact-support" class="support-link" id="contact-support-link">
+                                <i class="fas fa-headset" aria-hidden="true"></i>
+                                Contact Support
+                            </a>
+                            <span class="separator">•</span>
+                            <a href="#help" class="support-link">
+                                <i class="fas fa-question-circle" aria-hidden="true"></i>
+                                Help Center
+                            </a>
+                        </div>
+                        <div class="version-info">
+                            <small>HashiCorp Admin Portal v2.1.0</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay" aria-hidden="true">
+        <div class="loading-content">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+            </div>
+            <p>Authenticating...</p>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="admin-login.js"></script>
+</body>
+</html>
