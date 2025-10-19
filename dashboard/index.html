@@ -6,7 +6,8 @@
     <title>HashiCorp Ltd - Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="navbar.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
     <!-- Side Navigation -->
@@ -62,19 +63,23 @@
     <!-- Top Navigation Bar -->
     <nav class="navbar">
         <div class="navbar-container">
+            <button class="sidebar-toggle" id="sidebar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
             <div class="search-bar">
-                <i class="fas fa-search"></i>
-                <input type="text" placeholder="Search...">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Search projects, clients, services..." id="search-input">
+                <div class="search-results" id="search-results"></div>
             </div>
             <div class="navbar-right">
                 <div class="nav-icons">
-                    <a href="#" class="nav-icon">
+                    <a href="#" class="nav-icon" title="Notifications">
                         <i class="far fa-bell"></i>
-                        <span class="badge">1</span>
+                        <span class="badge">3</span>
                     </a>
-                    <a href="#" class="nav-icon">
+                    <a href="#" class="nav-icon" title="Settings">
                         <i class="fas fa-cog"></i>
-                        <span class="badge">5</span>
+                        <span class="badge">2</span>
                     </a>
                 </div>
                 <div class="user-menu">

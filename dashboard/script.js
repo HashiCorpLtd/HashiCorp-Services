@@ -334,58 +334,255 @@ function logout() {
 
 // Search functionality
 function setupSearch() {
-    const searchInput = document.querySelector('.search-bar input');
-    if (searchInput) {
+    const searchInput = document.querySelector('#search-input');
+    const searchResults = document.querySelector('#search-results');
+    
+    if (searchInput && searchResults) {
+        let searchTimeout;
+        
         searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            if (query.length > 2) {
-                performSearch(query);
+            const query = e.target.value.trim();
+            
+            // Clear previous timeout
+            clearTimeout(searchTimeout);
+            
+            if (query.length === 0) {
+                hideSearchResults();
+                return;
+            }
+            
+            // Debounce search to avoid too many calls
+            searchTimeout = setTimeout(() => {
+                if (query.length >= 2) {
+                    performSearch(query);
+                } else {
+                    hideSearchResults();
+                }
+            }, 300);
+        });
+        
+        // Hide search results when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                hideSearchResults();
+            }
+        });
+        
+        // Handle keyboard navigation
+        searchInput.addEventListener('keydown', (e) => {
+            const items = searchResults.querySelectorAll('.search-result-item');
+            const activeItem = searchResults.querySelector('.search-result-item.active');
+            let activeIndex = Array.from(items).indexOf(activeItem);
+            
+            switch(e.key) {
+                case 'ArrowDown':
+                    e.preventDefault();
+                    if (activeIndex < items.length - 1) {
+                        activeIndex++;
+                    } else {
+                        activeIndex = 0;
+                    }
+                    highlightSearchResult(items, activeIndex);
+                    break;
+                    
+                case 'ArrowUp':
+                    e.preventDefault();
+                    if (activeIndex > 0) {
+                        activeIndex--;
+                    } else {
+                        activeIndex = items.length - 1;
+                    }
+                    highlightSearchResult(items, activeIndex);
+                    break;
+                    
+                case 'Enter':
+                    e.preventDefault();
+                    if (activeItem) {
+                        activeItem.click();
+                    }
+                    break;
+                    
+                case 'Escape':
+                    hideSearchResults();
+                    searchInput.blur();
+                    break;
             }
         });
     }
 }
 
 function performSearch(query) {
-    // Simple search implementation
-    const searchResults = [];
+    const searchResults = document.querySelector('#search-results');
+    const searchResultsData = [];
+    const queryLower = query.toLowerCase();
     
     // Search projects
     sampleData.projects.forEach(project => {
-        if (project.name.toLowerCase().includes(query) || 
-            project.client.toLowerCase().includes(query)) {
-            searchResults.push({
-                type: 'Project',
+        if (project.name.toLowerCase().includes(queryLower) || 
+            project.client.toLowerCase().includes(queryLower) ||
+            project.status.toLowerCase().includes(queryLower)) {
+            searchResultsData.push({
+                type: 'project',
+                typeName: 'Project',
                 name: project.name,
-                description: `Client: ${project.client}`
+                description: `Client: ${project.client} • Status: ${project.status}`,
+                action: () => navigateToProject(project.id),
+                icon: 'fas fa-project-diagram'
             });
         }
     });
     
     // Search clients
     sampleData.clients.forEach(client => {
-        if (client.name.toLowerCase().includes(query) || 
-            client.email.toLowerCase().includes(query)) {
-            searchResults.push({
-                type: 'Client',
+        if (client.name.toLowerCase().includes(queryLower) || 
+            client.email.toLowerCase().includes(queryLower)) {
+            searchResultsData.push({
+                type: 'client',
+                typeName: 'Client',
                 name: client.name,
-                description: client.email
+                description: `${client.email} • ${client.projects} projects`,
+                action: () => navigateToClient(client.id),
+                icon: 'fas fa-users'
             });
         }
     });
     
     // Search services
     sampleData.services.forEach(service => {
-        if (service.name.toLowerCase().includes(query) || 
-            service.description.toLowerCase().includes(query)) {
-            searchResults.push({
-                type: 'Service',
+        if (service.name.toLowerCase().includes(queryLower) || 
+            service.description.toLowerCase().includes(queryLower)) {
+            searchResultsData.push({
+                type: 'service',
+                typeName: 'Service',
                 name: service.name,
-                description: service.description
+                description: service.description,
+                action: () => navigateToService(service.id),
+                icon: 'fas fa-cog'
             });
         }
     });
     
-    console.log('Search results:', searchResults);
+    displaySearchResults(searchResultsData, query);
+}
+
+function displaySearchResults(results, query) {
+    const searchResultsContainer = document.querySelector('#search-results');
+    
+    if (results.length === 0) {
+        searchResultsContainer.innerHTML = `
+            <div class="search-no-results">
+                <i class="fas fa-search"></i>
+                <p>No results found for "${query}"</p>
+            </div>
+        `;
+    } else {
+        const resultsHtml = `
+            <div class="search-results-header">
+                Found ${results.length} result${results.length !== 1 ? 's' : ''} for "${query}"
+            </div>
+            ${results.map((result, index) => `
+                <div class="search-result-item ${index === 0 ? 'active' : ''}" 
+                     data-action="${result.type}" 
+                     onclick="handleSearchResultClick('${result.type}', ${JSON.stringify(result).replace(/"/g, '&quot;')})">
+                    <div class="search-result-icon ${result.type}">
+                        <i class="${result.icon}"></i>
+                    </div>
+                    <div class="search-result-content">
+                        <div class="search-result-title">${highlightSearchTerm(result.name, query)}</div>
+                        <div class="search-result-description">${highlightSearchTerm(result.description, query)}</div>
+                    </div>
+                    <div class="search-result-type">${result.typeName}</div>
+                </div>
+            `).join('')}
+        `;
+        searchResultsContainer.innerHTML = resultsHtml;
+    }
+    
+    searchResultsContainer.classList.add('show');
+}
+
+function highlightSearchTerm(text, term) {
+    if (!term) return text;
+    const regex = new RegExp(`(${term})`, 'gi');
+    return text.replace(regex, '<strong style="background: rgba(116, 185, 255, 0.2); color: #0984e3;">$1</strong>');
+}
+
+function highlightSearchResult(items, activeIndex) {
+    items.forEach(item => item.classList.remove('active'));
+    if (items[activeIndex]) {
+        items[activeIndex].classList.add('active');
+        items[activeIndex].scrollIntoView({ block: 'nearest' });
+    }
+}
+
+function hideSearchResults() {
+    const searchResults = document.querySelector('#search-results');
+    if (searchResults) {
+        searchResults.classList.remove('show');
+    }
+}
+
+function handleSearchResultClick(type, result) {
+    const data = typeof result === 'string' ? JSON.parse(result) : result;
+    hideSearchResults();
+    
+    // Clear search input
+    const searchInput = document.querySelector('#search-input');
+    if (searchInput) {
+        searchInput.value = '';
+    }
+    
+    // Navigate based on type
+    switch(type) {
+        case 'project':
+            router.navigateTo('projects');
+            break;
+        case 'client':
+            router.navigateTo('clients');
+            break;
+        case 'service':
+            router.navigateTo('services');
+            break;
+    }
+    
+    // Add a brief highlight effect to show what was selected
+    setTimeout(() => {
+        showNotification(`Navigated to ${data.typeName}: ${data.name}`, 'success');
+    }, 300);
+}
+
+function navigateToProject(projectId) {
+    router.navigateTo('projects');
+}
+
+function navigateToClient(clientId) {
+    router.navigateTo('clients');
+}
+
+function navigateToService(serviceId) {
+    router.navigateTo('services');
+}
+
+function showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <i class="fas fa-check-circle"></i>
+        <span>${message}</span>
+    `;
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Show with animation
+    setTimeout(() => notification.classList.add('show'), 100);
+    
+    // Remove after delay
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
 }
 
 // Initialize application
@@ -573,11 +770,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Add event listeners for interactive elements
-document.querySelector('.search-bar input').addEventListener('input', (e) => {
-    // Add search functionality here
-    console.log('Searching for:', e.target.value);
-});
-
 document.querySelector('.fa-bell').addEventListener('click', () => {
     // Add notification functionality here
     alert('Notifications feature coming soon!');
