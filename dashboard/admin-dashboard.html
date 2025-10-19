@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - HashiCorp Ltd</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Admin-specific styles */
+        .admin-badge {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .admin-header {
+            background: linear-gradient(135deg, #1a2533, #243447);
+            border-bottom: 2px solid #dc3545;
+        }
+        
+        /* Fix main content visibility */
+        .main-content {
+            display: flex !important;
+            flex-direction: column !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            min-height: 100vh !important;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+            margin-left: 280px !important;
+            padding-top: 80px !important;
+        }
+        
+        .content-wrapper {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            padding: 2rem !important;
+            flex: 1 !important;
+        }
+        
+        .page-content {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+        
+        .page-content.active {
+            display: block !important;
+        }
+        
+        /* Navbar fix */
+        .navbar {
+            position: fixed !important;
+            top: 0 !important;
+            left: 280px !important;
+            right: 0 !important;
+            z-index: 1001 !important;
+            height: 64px !important;
+        }
+        
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .admin-stat-card {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.1), rgba(200, 35, 51, 0.05));
+            border: 1px solid rgba(220, 53, 69, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(220, 53, 69, 0.2);
+        }
+        
+        .admin-stat-icon {
+            font-size: 2.5rem;
+            color: #dc3545;
+            margin-bottom: 1rem;
+        }
+        
+        .admin-tools {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .admin-tool-card {
+            background: rgba(26, 37, 51, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-tool-card:hover {
+            background: rgba(26, 37, 51, 0.9);
+            border-color: #dc3545;
+        }
+        
+        .user-management-table {
+            width: 100%;
+            background: rgba(26, 37, 51, 0.7);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+        
+        .user-management-table th,
+        .user-management-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .user-management-table th {
+            background: rgba(220, 53, 69, 0.2);
+            font-weight: 600;
+        }
+        
+        .user-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .user-status.active {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+        }
+        
+        .user-status.inactive {
+            background: rgba(108, 117, 125, 0.2);
+            color: #6c757d;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .user-action-btn {
+            padding: 0.25rem 0.5rem;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .user-action-btn.edit {
+            background: rgba(0, 123, 255, 0.2);
+            color: #007bff;
+        }
+        
+        .user-action-btn.delete {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+        
+        .activity-log {
+            background: rgba(26, 37, 51, 0.7);
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        
+        .activity-icon.login {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+        }
+        
+        .activity-icon.logout {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+        
+        .activity-icon.action {
+            background: rgba(0, 123, 255, 0.2);
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Authentication Check -->
+    <script>
+        // Check admin authentication immediately
+        const adminToken = sessionStorage.getItem('adminToken');
+        const loginTime = sessionStorage.getItem('loginTime');
+        
+        if (!adminToken || !loginTime) {
+            // No authentication, redirect to login
+            window.location.href = 'login.html';
+        } else {
+            // Check if session is still valid
+            const sessionAge = Date.now() - parseInt(loginTime);
+            const maxSessionAge = 8 * 60 * 60 * 1000; // 8 hours
+            
+            if (sessionAge > maxSessionAge) {
+                // Session expired
+                sessionStorage.clear();
+                alert('Session expired. Please login again.');
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+
+    <!-- Side Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <h1><i class="fas fa-cube"></i> HashiCorp Ltd</h1>
+        </div>
+        <nav>
+            <ul id="sidebar-nav">
+                <li class="nav-item active" data-route="admin-dashboard">
+                    <a href="#/admin-dashboard">
+                        <i class="fas fa-tachometer-alt"></i> 
+                        <span>Admin Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-route="user-management">
+                    <a href="#/user-management">
+                        <i class="fas fa-users-cog"></i> 
+                        <span>User Management</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-route="system-settings">
+                    <a href="#/system-settings">
+                        <i class="fas fa-cogs"></i> 
+                        <span>System Settings</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-route="security">
+                    <a href="#/security">
+                        <i class="fas fa-shield-alt"></i> 
+                        <span>Security</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-route="analytics">
+                    <a href="#/analytics">
+                        <i class="fas fa-chart-line"></i> 
+                        <span>Analytics</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-route="logs">
+                    <a href="#/logs">
+                        <i class="fas fa-file-alt"></i> 
+                        <span>System Logs</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-route="backup">
+                    <a href="#/backup">
+                        <i class="fas fa-database"></i> 
+                        <span>Backup & Recovery</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Top Navigation -->
+    <header class="navbar admin-header" id="navbar">
+        <div class="nav-left">
+            <button class="sidebar-toggle" id="sidebar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="page-title" id="page-title">
+                <i class="fas fa-user-shield"></i>
+                Admin Dashboard
+                <span class="admin-badge">Admin</span>
+            </h1>
+        </div>
+        <div class="nav-right">
+            <div class="nav-items">
+                <div class="notification-icon">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">5</span>
+                </div>
+                <div class="user-profile">
+                    <img src="https://via.placeholder.com/32/007bff/ffffff?text=A" alt="Admin Avatar" class="user-avatar">
+                    <span class="user-name" id="user-name">Administrator</span>
+                    <i class="fas fa-chevron-down"></i>
+                    <div class="user-dropdown">
+                        <a href="#profile"><i class="fas fa-user"></i> Profile</a>
+                        <a href="#settings"><i class="fas fa-cog"></i> Settings</a>
+                        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+        <div class="content-wrapper" id="content-wrapper">
+            
+            <!-- Admin Dashboard Content -->
+            <div id="admin-dashboard-content" class="page-content active">
+                <div class="page-header">
+                    <h1>Administrator Dashboard</h1>
+                    <p>Comprehensive system overview and management tools</p>
+                </div>
+
+                <!-- Admin Statistics -->
+                <div class="admin-stats">
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Total Users</h3>
+                        <p class="stat-number">1,247</p>
+                        <small>+12% from last month</small>
+                    </div>
+                    
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <h3>Server Uptime</h3>
+                        <p class="stat-number">99.9%</p>
+                        <small>Last 30 days</small>
+                    </div>
+                    
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Security Alerts</h3>
+                        <p class="stat-number">3</p>
+                        <small>Requires attention</small>
+                    </div>
+                    
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>System Performance</h3>
+                        <p class="stat-number">Excellent</p>
+                        <small>All systems operational</small>
+                    </div>
+                </div>
+
+                <!-- Admin Tools Grid -->
+                <div class="admin-tools">
+                    <!-- User Management -->
+                    <div class="admin-tool-card">
+                        <h3><i class="fas fa-users-cog"></i> User Management</h3>
+                        <p>Manage user accounts, permissions, and access levels</p>
+                        <div class="user-management-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>john.doe@company.com</td>
+                                        <td>User</td>
+                                        <td><span class="user-status active">Active</span></td>
+                                        <td>
+                                            <div class="user-actions">
+                                                <button class="user-action-btn edit">Edit</button>
+                                                <button class="user-action-btn delete">Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>jane.smith@company.com</td>
+                                        <td>User</td>
+                                        <td><span class="user-status active">Active</span></td>
+                                        <td>
+                                            <div class="user-actions">
+                                                <button class="user-action-btn edit">Edit</button>
+                                                <button class="user-action-btn delete">Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>old.user@company.com</td>
+                                        <td>User</td>
+                                        <td><span class="user-status inactive">Inactive</span></td>
+                                        <td>
+                                            <div class="user-actions">
+                                                <button class="user-action-btn edit">Edit</button>
+                                                <button class="user-action-btn delete">Delete</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button class="btn btn-primary" style="margin-top: 1rem;">
+                            <i class="fas fa-plus"></i> Add New User
+                        </button>
+                    </div>
+
+                    <!-- System Activity -->
+                    <div class="admin-tool-card">
+                        <h3><i class="fas fa-activity"></i> System Activity</h3>
+                        <p>Recent system events and user activities</p>
+                        <div class="activity-log">
+                            <div class="activity-item">
+                                <div class="activity-icon login">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <strong>Admin Login</strong>
+                                    <p>admin@hashicorp.com logged in</p>
+                                    <small>2 minutes ago</small>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon action">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <strong>User Updated</strong>
+                                    <p>john.doe@company.com profile modified</p>
+                                    <small>15 minutes ago</small>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon logout">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <strong>User Logout</strong>
+                                    <p>jane.smith@company.com logged out</p>
+                                    <small>1 hour ago</small>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon action">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <strong>System Settings</strong>
+                                    <p>Security policies updated</p>
+                                    <small>3 hours ago</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="admin-tool-card">
+                        <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                        <p>Common administrative tasks</p>
+                        <div style="display: grid; gap: 1rem; margin-top: 1rem;">
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-database"></i> Backup Database
+                            </button>
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-sync"></i> Clear Cache
+                            </button>
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-file-export"></i> Export Reports
+                            </button>
+                            <button class="btn btn-warning">
+                                <i class="fas fa-exclamation-triangle"></i> System Maintenance
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Security Overview -->
+                    <div class="admin-tool-card">
+                        <h3><i class="fas fa-shield-alt"></i> Security Overview</h3>
+                        <p>System security status and alerts</p>
+                        <div style="margin-top: 1rem;">
+                            <div class="security-item" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <span>Failed Login Attempts</span>
+                                <span style="color: #dc3545; font-weight: 600;">7</span>
+                            </div>
+                            <div class="security-item" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <span>Active Sessions</span>
+                                <span style="color: #28a745; font-weight: 600;">23</span>
+                            </div>
+                            <div class="security-item" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <span>Security Scan</span>
+                                <span style="color: #28a745; font-weight: 600;">Passed</span>
+                            </div>
+                            <div class="security-item" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0;">
+                                <span>Last Backup</span>
+                                <span style="color: #6c757d; font-weight: 600;">2 hours ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other admin pages would go here (user-management, system-settings, etc.) -->
+            
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="navbar.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Admin-specific functionality
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.clear();
+                localStorage.removeItem('adminToken');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Set admin user name from session data
+        document.addEventListener('DOMContentLoaded', function() {
+            const adminUser = JSON.parse(sessionStorage.getItem('adminUser') || '{}');
+            if (adminUser.email) {
+                document.getElementById('user-name').textContent = adminUser.email.split('@')[0];
+            }
+        });
+
+        // Admin-specific navigation handling
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update page title for admin
+            document.title = 'Admin Dashboard - HashiCorp Ltd';
+            
+            // Add admin-specific event listeners
+            const adminActionButtons = document.querySelectorAll('.user-action-btn');
+            adminActionButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = this.textContent.toLowerCase();
+                    const userEmail = this.closest('tr').querySelector('td').textContent;
+                    
+                    if (action === 'edit') {
+                        alert(`Edit user: ${userEmail}`);
+                    } else if (action === 'delete') {
+                        if (confirm(`Are you sure you want to delete user: ${userEmail}?`)) {
+                            alert(`User ${userEmail} would be deleted`);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
