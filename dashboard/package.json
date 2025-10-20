@@ -1,21 +1,18 @@
 {
   "name": "hashicorp-services-dashboard",
   "version": "1.0.0",
-  "description": "A secure web application with role-based authentication for HashiCorp Ltd, featuring separate admin and user dashboards",
-  "main": "index.html",
+  "description": "A secure web application with role-based authentication for HashiCorp Ltd",
+  "main": "server.js",
   "scripts": {
-    "start": "python -m http.server 3000",
-    "dev": "python -m http.server 3001",
-    "serve": "python -m http.server"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "keywords": [
     "dashboard",
     "authentication",
     "admin-panel",
     "hashicorp",
-    "responsive",
-    "web-application",
-    "role-based-access"
+    "web-application"
   ],
   "author": "Satyam P",
   "license": "MIT",
@@ -23,16 +20,18 @@
     "type": "git",
     "url": "https://github.com/SatyamP45/HashiCorp-Services.git"
   },
-  "homepage": "https://github.com/SatyamP45/HashiCorp-Services#readme",
-  "bugs": {
-    "url": "https://github.com/SatyamP45/HashiCorp-Services/issues"
-  },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=14.0.0"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.0",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
 }

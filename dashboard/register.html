@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - HashiCorp Ltd</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta name="description" content="Registration portal for HashiCorp Services">
+    <style>
+        /* Minimal CSS for clean functionality */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2533 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+        }
+        
+        .register-container {
+            background: rgba(26, 37, 51, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo i {
+            font-size: 3rem;
+            color: #007bff;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #007bff;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .register-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #28a745 0%, #20873a 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .register-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
+        }
+        
+        .register-button:active {
+            transform: translateY(0);
+        }
+        
+        .back-button {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .success-message {
+            color: #28a745;
+            font-size: 14px;
+            margin-top: 5px;
+            text-align: center;
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            color: #007bff;
+            margin-top: 20px;
+        }
+        
+        .loading.show {
+            display: block;
+        }
+        
+        .loading i {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .login-link a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .password-requirements {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 5px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .register-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <button class="back-button" onclick="window.location.href='login.html'">
+            <i class="fas fa-arrow-left"></i> Back to Login
+        </button>
+        
+        <div class="logo">
+            <i class="fas fa-user-plus"></i>
+            <h1>Create Account</h1>
+        </div>
+        
+        <form id="register-form" onsubmit="return handleRegistration(event)">
+            <div class="form-group">
+                <label for="register-name">Full Name</label>
+                <input type="text" id="register-name" class="form-input" placeholder="Enter your full name" required>
+                <div class="error-message" id="name-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="register-email">Email Address</label>
+                <input type="email" id="register-email" class="form-input" placeholder="Enter your email" required>
+                <div class="error-message" id="email-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="register-password">Password</label>
+                <input type="password" id="register-password" class="form-input" placeholder="Create a password" required>
+                <div class="password-requirements">
+                    Password must be at least 6 characters long
+                </div>
+                <div class="error-message" id="password-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="register-confirm-password">Confirm Password</label>
+                <input type="password" id="register-confirm-password" class="form-input" placeholder="Confirm your password" required>
+                <div class="error-message" id="confirm-password-error"></div>
+            </div>
+            
+            <button type="submit" class="register-button">
+                <i class="fas fa-user-plus"></i> Create Account
+            </button>
+            
+            <div class="loading" id="register-loading">
+                <i class="fas fa-spinner"></i> Creating your account...
+            </div>
+            
+            <div class="success-message" id="register-success"></div>
+        </form>
+        
+        <div class="login-link">
+            <p>Already have an account? <a href="login.html">Sign in here</a></p>
+        </div>
+    </div>
+    
+    <script>
+        function showLoading() {
+            document.getElementById('register-loading').classList.add('show');
+        }
+        
+        function hideLoading() {
+            document.getElementById('register-loading').classList.remove('show');
+        }
+        
+        function showSuccess(message) {
+            const successEl = document.getElementById('register-success');
+            successEl.textContent = message;
+            successEl.classList.add('show');
+        }
+        
+        function showError(field, message) {
+            const errorEl = document.getElementById(`${field}-error`);
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+        }
+        
+        function clearErrors() {
+            const errors = document.querySelectorAll('.error-message');
+            errors.forEach(error => {
+                error.classList.remove('show');
+                error.textContent = '';
+            });
+            
+            const success = document.querySelector('.success-message');
+            success.classList.remove('show');
+            success.textContent = '';
+        }
+        
+        function validateForm() {
+            clearErrors();
+            let isValid = true;
+            
+            const name = document.getElementById('register-name').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+            
+            // Name validation
+            if (!name || name.length < 2) {
+                showError('name', 'Please enter a valid name (at least 2 characters)');
+                isValid = false;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email || !emailRegex.test(email)) {
+                showError('email', 'Please enter a valid email address');
+                isValid = false;
+            }
+            
+            // Password validation
+            if (!password || password.length < 6) {
+                showError('password', 'Password must be at least 6 characters long');
+                isValid = false;
+            }
+            
+            // Confirm password validation
+            if (password !== confirmPassword) {
+                showError('confirm-password', 'Passwords do not match');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        async function handleRegistration(event) {
+            event.preventDefault();
+            
+            if (!validateForm()) {
+                return false;
+            }
+            
+            const name = document.getElementById('register-name').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
+            
+            showLoading();
+            
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                hideLoading();
+                
+                if (!response.ok) {
+                    if (response.status === 409) {
+                        showError('email', 'An account with this email already exists');
+                    } else {
+                        showError('email', data.message || 'Registration failed');
+                    }
+                    return false;
+                }
+                
+                // Registration successful
+                showSuccess('Account created successfully! Redirecting to login...');
+                
+                // Clear the form
+                document.getElementById('register-form').reset();
+                
+                // Redirect to login page after 2 seconds
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+                
+            } catch (error) {
+                hideLoading();
+                console.error('Registration error:', error);
+                showError('email', 'Server error. Please try again later.');
+            }
+            
+            return false;
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Registration page loaded successfully');
+            
+            // Clear any existing sessions
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            localStorage.removeItem('userToken');
+            localStorage.removeItem('userUser');
+            localStorage.removeItem('isLoggedIn');
+            sessionStorage.clear();
+            
+            // Focus on name field
+            document.getElementById('register-name').focus();
+        });
+    </script>
+</body>
+</html>
