@@ -86,6 +86,12 @@
                         <span>Settings</span>
                     </a>
                 </li>
+                <li class="nav-item" data-route="profile">
+                    <a href="#/profile">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
                 <li class="nav-item logout-item">
                     <a href="#" id="logout-btn">
                         <i class="fas fa-sign-out-alt"></i> 
@@ -268,6 +274,35 @@
                     <!-- Settings will be dynamically loaded -->
                 </div>
             </section>
+
+            <!-- Profile Page -->
+            <section id="route-profile" class="page-content">
+                <div class="page-header">
+                    <h2>Your Profile</h2>
+                </div>
+                <div class="profile-content" id="profile-content">
+                    <div class="profile-card">
+                        <img id="profile-avatar" src="https://via.placeholder.com/100" alt="avatar" style="border-radius:50%;width:100px;height:100px">
+                        <h3 id="profile-name">User</h3>
+                        <p id="profile-email">user@example.com</p>
+                        <div class="form-group">
+                            <label for="profile-name-input">Name</label>
+                            <input id="profile-name-input" type="text">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-avatar-input">Avatar URL</label>
+                            <input id="profile-avatar-input" type="text">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-password-input">New Password</label>
+                            <input id="profile-password-input" type="password">
+                        </div>
+                        <div class="form-actions">
+                            <button id="save-profile-btn" class="btn btn-primary">Save Profile</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -373,25 +408,75 @@
     </div>
 
     <script>
-        // Load user information
-        document.addEventListener('DOMContentLoaded', function() {
-            const userData = JSON.parse(sessionStorage.getItem('userUser') || '{}');
-            if (userData.email) {
-                const userName = userData.email.split('@')[0];
-                document.getElementById('user-name').textContent = userName;
-                document.getElementById('welcome-user-name').textContent = userName;
+        // Load user information and profile from API
+        document.addEventListener('DOMContentLoaded', async function() {
+            const token = sessionStorage.getItem('userToken') || sessionStorage.getItem('adminToken');
+            if (!token) return; // should be redirected earlier
+
+            try {
+                const res = await fetch('/api/auth/profile', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if (!res.ok) throw new Error('Unauthorized');
+                const data = await res.json();
+                const user = data.user;
+
+                // update navbar
+                const userName = (user.email || user.name || 'User').split('@')[0];
+                const userNameEls = document.querySelectorAll('#user-name, #welcome-user-name');
+                userNameEls.forEach(el => { if (el) el.textContent = userName; });
+
+                // populate profile page
+                const avatar = user.avatarUrl || 'https://via.placeholder.com/100';
+                document.getElementById('profile-avatar').src = avatar;
+                document.getElementById('profile-name').textContent = user.name || userName;
+                document.getElementById('profile-email').textContent = user.email || '';
+                document.getElementById('profile-name-input').value = user.name || '';
+                document.getElementById('profile-avatar-input').value = user.avatarUrl || '';
+
+                // save profile handler
+                document.getElementById('save-profile-btn').addEventListener('click', async function() {
+                    const name = document.getElementById('profile-name-input').value.trim();
+                    const avatarUrl = document.getElementById('profile-avatar-input').value.trim();
+                    const password = document.getElementById('profile-password-input').value;
+                    const payload = { name };
+                    if (avatarUrl) payload.avatarUrl = avatarUrl;
+                    if (password) payload.password = password;
+
+                    const r = await fetch('/api/auth/profile', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                        body: JSON.stringify(payload)
+                    });
+                    const updated = await r.json();
+                    if (r.ok) {
+                        alert('Profile updated');
+                        // refresh UI
+                        if (updated.user.avatarUrl) document.getElementById('profile-avatar').src = updated.user.avatarUrl;
+                        document.getElementById('profile-name').textContent = updated.user.name || userName;
+                        sessionStorage.setItem('userUser', JSON.stringify(updated.user));
+                    } else {
+                        alert(updated.message || 'Unable to update profile');
+                    }
+                });
+
+                // logout clears both tokens
+                document.getElementById('logout-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (confirm('Are you sure you want to logout?')) {
+                        sessionStorage.clear();
+                        localStorage.removeItem('userToken');
+                        localStorage.removeItem('userUser');
+                        localStorage.removeItem('adminToken');
+                        localStorage.removeItem('adminUser');
+                        window.location.href = 'login.html';
+                    }
+                });
+
+            } catch (err) {
+                console.warn('Failed to load profile', err);
+                // leave behavior as-is; user may be redirected by existing checks
             }
-            
-            // Setup logout functionality
-            document.getElementById('logout-btn').addEventListener('click', function(e) {
-                e.preventDefault();
-                if (confirm('Are you sure you want to logout?')) {
-                    sessionStorage.clear();
-                    localStorage.removeItem('userToken');
-                    localStorage.removeItem('userUser');
-                    window.location.href = 'login.html';
-                }
-            });
         });
     </script>
     <script src="script.js"></script>

@@ -1,7 +1,20 @@
 // Check authentication
-if (!localStorage.getItem('isLoggedIn')) {
-    window.location.href = 'login.html';
-}
+(function() {
+    // Old code relied on a boolean 'isLoggedIn'. New flow uses JWT tokens stored
+    // in sessionStorage/localStorage under userToken/adminToken. Keep backwards
+    // compatibility by checking both.
+    const isLoggedInFlag = localStorage.getItem('isLoggedIn') === 'true';
+    const tokens = [
+        sessionStorage.getItem('userToken'),
+        localStorage.getItem('userToken'),
+        sessionStorage.getItem('adminToken'),
+        localStorage.getItem('adminToken')
+    ];
+    const hasToken = tokens.some(t => !!t);
+    if (!isLoggedInFlag && !hasToken) {
+        window.location.href = 'login.html';
+    }
+})();
 
 // Sample data
 const sampleData = {

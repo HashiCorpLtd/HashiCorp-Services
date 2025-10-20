@@ -205,6 +205,23 @@
             to { transform: rotate(360deg); }
         }
         
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .register-link a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 480px) {
             .login-container {
@@ -239,6 +256,10 @@
                 <button class="option-button" onclick="showUserLogin()">
                     <i class="fas fa-user"></i> User Login
                 </button>
+            </div>
+            
+            <div class="register-link">
+                <p>Don't have an account? <a href="register.html">Create one here</a></p>
             </div>
         </div>
         
@@ -405,7 +426,7 @@
             document.getElementById('user-username').focus();
         }
         
-        function handleAdminLogin(event) {
+        async function handleAdminLogin(event) {
             event.preventDefault();
             clearErrors();
             
@@ -424,28 +445,38 @@
             }
             
             showLoading('admin');
-            
-            // Simulate authentication delay
-            setTimeout(() => {
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: username, password })
+                });
+                const data = await res.json();
                 hideLoading('admin');
-                
-                if (username === 'admin' && password === 'admin123') {
-                    setSession('admin', username);
-                    showSuccess('admin', 'Login successful! Redirecting...');
-                    
-                    setTimeout(() => {
-                        window.location.href = 'admin-dashboard.html';
-                    }, 1500);
-                } else {
-                    showError('admin-username', 'Invalid credentials');
-                    showError('admin-password', 'Please check your username and password');
+                if (!res.ok) {
+                    showError('admin-username', data.message || 'Invalid credentials');
+                    return false;
                 }
-            }, 1000);
+
+                // store session
+                localStorage.setItem('adminToken', data.token);
+                sessionStorage.setItem('adminToken', data.token);
+                sessionStorage.setItem('adminUser', JSON.stringify(data.user));
+                // compatibility fields expected by dashboard
+                const loginTime = Date.now().toString();
+                sessionStorage.setItem('loginTime', loginTime);
+                localStorage.setItem('isLoggedIn', 'true');
+                showSuccess('admin', 'Login successful! Redirecting...');
+                setTimeout(() => { window.location.href = 'admin-dashboard.html'; }, 800);
+            } catch (err) {
+                hideLoading('admin');
+                showError('admin-username', 'Server error');
+            }
             
             return false;
         }
         
-        function handleUserLogin(event) {
+        async function handleUserLogin(event) {
             event.preventDefault();
             clearErrors();
             
@@ -464,23 +495,33 @@
             }
             
             showLoading('user');
-            
-            // Simulate authentication delay
-            setTimeout(() => {
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: username, password })
+                });
+                const data = await res.json();
                 hideLoading('user');
-                
-                if (username === 'user' && password === 'user123') {
-                    setSession('user', username);
-                    showSuccess('user', 'Login successful! Redirecting...');
-                    
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 1500);
-                } else {
-                    showError('user-username', 'Invalid credentials');
-                    showError('user-password', 'Please check your username and password');
+                if (!res.ok) {
+                    showError('user-username', data.message || 'Invalid credentials');
+                    return false;
                 }
-            }, 1000);
+
+                // store session
+                localStorage.setItem('userToken', data.token);
+                sessionStorage.setItem('userToken', data.token);
+                sessionStorage.setItem('userUser', JSON.stringify(data.user));
+                // compatibility fields expected by dashboard
+                const loginTime = Date.now().toString();
+                sessionStorage.setItem('loginTime', loginTime);
+                localStorage.setItem('isLoggedIn', 'true');
+                showSuccess('user', 'Login successful! Redirecting...');
+                setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+            } catch (err) {
+                hideLoading('user');
+                showError('user-username', 'Server error');
+            }
             
             return false;
         }
