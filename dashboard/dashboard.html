@@ -126,8 +126,32 @@
                 </div>
                 <div class="user-menu">
                     <div class="user-profile" id="user-profile">
-                        <img src="https://via.placeholder.com/40" alt="User Avatar" class="user-avatar">
+                        <img src="https://via.placeholder.com/40" alt="User Avatar" class="user-avatar" id="navbar-user-avatar">
                         <span class="user-name" id="user-name">User</span>
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </div>
+                    <div class="user-dropdown" id="user-dropdown">
+                        <div class="dropdown-header">
+                            <img src="https://via.placeholder.com/50" alt="User Avatar" class="dropdown-avatar" id="dropdown-user-avatar">
+                            <div class="dropdown-info">
+                                <span class="dropdown-name" id="dropdown-user-name">User</span>
+                                <span class="dropdown-email" id="dropdown-user-email">user@example.com</span>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="#/profile" class="dropdown-item" data-route="profile">
+                            <i class="fas fa-user-circle"></i>
+                            <span>My Profile</span>
+                        </a>
+                        <a href="#/settings" class="dropdown-item" data-route="settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" id="dropdown-logout-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -279,26 +303,110 @@
             <section id="route-profile" class="page-content">
                 <div class="page-header">
                     <h2>Your Profile</h2>
+                    <p>Manage your account information and preferences</p>
                 </div>
                 <div class="profile-content" id="profile-content">
-                    <div class="profile-card">
-                        <img id="profile-avatar" src="https://via.placeholder.com/100" alt="avatar" style="border-radius:50%;width:100px;height:100px">
-                        <h3 id="profile-name">User</h3>
-                        <p id="profile-email">user@example.com</p>
-                        <div class="form-group">
-                            <label for="profile-name-input">Name</label>
-                            <input id="profile-name-input" type="text">
+                    <div class="profile-layout">
+                        <!-- Profile Overview Card -->
+                        <div class="profile-overview-card">
+                            <div class="profile-header">
+                                <div class="avatar-section">
+                                    <img id="profile-avatar" src="https://via.placeholder.com/120" alt="Profile Avatar" class="profile-avatar">
+                                    <div class="avatar-upload">
+                                        <i class="fas fa-camera"></i>
+                                        <span>Change Photo</span>
+                                    </div>
+                                </div>
+                                <div class="profile-info">
+                                    <h3 id="profile-name">Loading...</h3>
+                                    <p id="profile-email">Loading...</p>
+                                    <div class="profile-meta">
+                                        <span class="profile-role" id="profile-role">User</span>
+                                        <span class="profile-joined" id="profile-joined">Member since 2025</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="profile-avatar-input">Avatar URL</label>
-                            <input id="profile-avatar-input" type="text">
+
+                        <!-- Profile Edit Form -->
+                        <div class="profile-edit-card">
+                            <h4><i class="fas fa-edit"></i> Edit Profile Information</h4>
+                            <form id="profile-edit-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="profile-name-input">
+                                            <i class="fas fa-user"></i> Full Name
+                                        </label>
+                                        <input id="profile-name-input" type="text" placeholder="Enter your full name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profile-email-display">
+                                            <i class="fas fa-envelope"></i> Email Address
+                                        </label>
+                                        <input id="profile-email-display" type="email" readonly>
+                                        <small class="form-note">Email cannot be changed</small>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profile-avatar-input">
+                                        <i class="fas fa-image"></i> Avatar URL
+                                    </label>
+                                    <input id="profile-avatar-input" type="url" placeholder="https://example.com/your-avatar.jpg">
+                                    <small class="form-note">Enter a URL for your profile picture</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profile-password-input">
+                                        <i class="fas fa-lock"></i> New Password
+                                    </label>
+                                    <input id="profile-password-input" type="password" placeholder="Leave blank to keep current password">
+                                    <small class="form-note">Minimum 6 characters</small>
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="button" id="save-profile-btn" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> Save Changes
+                                    </button>
+                                    <button type="button" id="cancel-profile-btn" class="btn btn-secondary">
+                                        <i class="fas fa-times"></i> Cancel
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="form-group">
-                            <label for="profile-password-input">New Password</label>
-                            <input id="profile-password-input" type="password">
-                        </div>
-                        <div class="form-actions">
-                            <button id="save-profile-btn" class="btn btn-primary">Save Profile</button>
+
+                        <!-- Account Statistics -->
+                        <div class="profile-stats-card">
+                            <h4><i class="fas fa-chart-line"></i> Account Activity</h4>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h5 id="profile-last-login">Last Login</h5>
+                                        <p>Today</p>
+                                    </div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h5>Account Created</h5>
+                                        <p id="profile-created-date">Loading...</p>
+                                    </div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <h5>Security Status</h5>
+                                        <p class="status-secure">Secure</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -427,38 +535,10 @@
                 userNameEls.forEach(el => { if (el) el.textContent = userName; });
 
                 // populate profile page
-                const avatar = user.avatarUrl || 'https://via.placeholder.com/100';
-                document.getElementById('profile-avatar').src = avatar;
-                document.getElementById('profile-name').textContent = user.name || userName;
-                document.getElementById('profile-email').textContent = user.email || '';
-                document.getElementById('profile-name-input').value = user.name || '';
-                document.getElementById('profile-avatar-input').value = user.avatarUrl || '';
+                populateProfileData(user);
 
-                // save profile handler
-                document.getElementById('save-profile-btn').addEventListener('click', async function() {
-                    const name = document.getElementById('profile-name-input').value.trim();
-                    const avatarUrl = document.getElementById('profile-avatar-input').value.trim();
-                    const password = document.getElementById('profile-password-input').value;
-                    const payload = { name };
-                    if (avatarUrl) payload.avatarUrl = avatarUrl;
-                    if (password) payload.password = password;
-
-                    const r = await fetch('/api/auth/profile', {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-                        body: JSON.stringify(payload)
-                    });
-                    const updated = await r.json();
-                    if (r.ok) {
-                        alert('Profile updated');
-                        // refresh UI
-                        if (updated.user.avatarUrl) document.getElementById('profile-avatar').src = updated.user.avatarUrl;
-                        document.getElementById('profile-name').textContent = updated.user.name || userName;
-                        sessionStorage.setItem('userUser', JSON.stringify(updated.user));
-                    } else {
-                        alert(updated.message || 'Unable to update profile');
-                    }
-                });
+                // Initialize profile functionality
+                initializeProfileHandlers(token, user);
 
                 // logout clears both tokens
                 document.getElementById('logout-btn').addEventListener('click', function(e) {
@@ -478,6 +558,329 @@
                 // leave behavior as-is; user may be redirected by existing checks
             }
         });
+
+        // Profile helper functions
+        function populateProfileData(user) {
+            const avatar = user.avatarUrl || 'https://via.placeholder.com/120';
+            const userName = user.name || user.email?.split('@')[0] || 'User';
+            
+            // Update profile overview
+            document.getElementById('profile-avatar').src = avatar;
+            document.getElementById('profile-name').textContent = userName;
+            document.getElementById('profile-email').textContent = user.email || '';
+            document.getElementById('profile-role').textContent = (user.role || 'user').toUpperCase();
+            
+            // Update navbar user info
+            updateNavbarUserInfo(user);
+            
+            // Update form fields
+            document.getElementById('profile-name-input').value = user.name || '';
+            document.getElementById('profile-email-display').value = user.email || '';
+            document.getElementById('profile-avatar-input').value = user.avatarUrl || '';
+            
+            // Update account creation date
+            if (user.createdAt) {
+                const createdDate = new Date(user.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                document.getElementById('profile-created-date').textContent = createdDate;
+            }
+            
+            // Store original values for cancel functionality
+            window.originalProfileData = {
+                name: user.name || '',
+                avatarUrl: user.avatarUrl || ''
+            };
+        }
+
+        function updateNavbarUserInfo(user) {
+            const avatar = user.avatarUrl || 'https://via.placeholder.com/40';
+            const userName = user.name || user.email?.split('@')[0] || 'User';
+            
+            // Update navbar avatar and name
+            const navbarAvatar = document.getElementById('navbar-user-avatar');
+            if (navbarAvatar) navbarAvatar.src = avatar;
+            
+            const navbarName = document.getElementById('user-name');
+            if (navbarName) navbarName.textContent = userName;
+            
+            // Update dropdown info
+            const dropdownAvatar = document.getElementById('dropdown-user-avatar');
+            if (dropdownAvatar) dropdownAvatar.src = avatar;
+            
+            const dropdownName = document.getElementById('dropdown-user-name');
+            if (dropdownName) dropdownName.textContent = userName;
+            
+            const dropdownEmail = document.getElementById('dropdown-user-email');
+            if (dropdownEmail) dropdownEmail.textContent = user.email || '';
+        }
+
+        function initializeProfileHandlers(token, user) {
+            // Save profile handler
+            document.getElementById('save-profile-btn').addEventListener('click', async function() {
+                const saveBtn = this;
+                const originalText = saveBtn.innerHTML;
+                
+                try {
+                    // Show loading state
+                    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                    saveBtn.disabled = true;
+                    
+                    const name = document.getElementById('profile-name-input').value.trim();
+                    const avatarUrl = document.getElementById('profile-avatar-input').value.trim();
+                    const password = document.getElementById('profile-password-input').value;
+                    
+                    // Validate inputs
+                    if (!name) {
+                        throw new Error('Name is required');
+                    }
+                    
+                    if (avatarUrl && !isValidUrl(avatarUrl)) {
+                        throw new Error('Please enter a valid URL for avatar');
+                    }
+                    
+                    if (password && password.length < 6) {
+                        throw new Error('Password must be at least 6 characters');
+                    }
+                    
+                    const payload = { name };
+                    if (avatarUrl) payload.avatarUrl = avatarUrl;
+                    if (password) payload.password = password;
+
+                    const response = await fetch('/api/auth/profile', {
+                        method: 'PUT',
+                        headers: { 
+                            'Content-Type': 'application/json', 
+                            'Authorization': 'Bearer ' + token 
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    const updated = await response.json();
+                    
+                    if (response.ok) {
+                        // Update UI with new data
+                        populateProfileData(updated.user);
+                        
+                        // Clear password field
+                        document.getElementById('profile-password-input').value = '';
+                        
+                        // Update session storage
+                        sessionStorage.setItem('userUser', JSON.stringify(updated.user));
+                        
+                        // Show success message
+                        showProfileMessage('Profile updated successfully!', 'success');
+                        
+                        // Update navbar and welcome text
+                        const newUserName = (updated.user.name || updated.user.email?.split('@')[0] || 'User');
+                        const userNameEls = document.querySelectorAll('#user-name, #welcome-user-name');
+                        userNameEls.forEach(el => { if (el) el.textContent = newUserName; });
+                        
+                        // Update navbar avatars and dropdown info
+                        updateNavbarUserInfo(updated.user);
+                        
+                    } else {
+                        throw new Error(updated.message || 'Failed to update profile');
+                    }
+                } catch (error) {
+                    showProfileMessage(error.message, 'error');
+                } finally {
+                    // Restore button state
+                    saveBtn.innerHTML = originalText;
+                    saveBtn.disabled = false;
+                }
+            });
+            
+            // Cancel profile changes handler
+            document.getElementById('cancel-profile-btn').addEventListener('click', function() {
+                // Restore original values
+                document.getElementById('profile-name-input').value = window.originalProfileData.name;
+                document.getElementById('profile-avatar-input').value = window.originalProfileData.avatarUrl;
+                document.getElementById('profile-password-input').value = '';
+                
+                showProfileMessage('Changes cancelled', 'info');
+            });
+            
+            // Avatar upload click handler
+            document.querySelector('.avatar-upload').addEventListener('click', function() {
+                const avatarInput = document.getElementById('profile-avatar-input');
+                avatarInput.focus();
+                avatarInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+            
+            // Real-time avatar preview
+            document.getElementById('profile-avatar-input').addEventListener('input', function() {
+                const url = this.value.trim();
+                if (url && isValidUrl(url)) {
+                    const avatarImg = document.getElementById('profile-avatar');
+                    avatarImg.src = url;
+                    avatarImg.onerror = function() {
+                        this.src = 'https://via.placeholder.com/120';
+                    };
+                    
+                    // Also update navbar avatars in real-time
+                    const navbarAvatar = document.getElementById('navbar-user-avatar');
+                    const dropdownAvatar = document.getElementById('dropdown-user-avatar');
+                    if (navbarAvatar) {
+                        navbarAvatar.src = url;
+                        navbarAvatar.onerror = function() { this.src = 'https://via.placeholder.com/40'; };
+                    }
+                    if (dropdownAvatar) {
+                        dropdownAvatar.src = url;
+                        dropdownAvatar.onerror = function() { this.src = 'https://via.placeholder.com/50'; };
+                    }
+                }
+            });
+        }
+
+        // Initialize navbar dropdown functionality
+        function initializeNavbarDropdown() {
+            const userProfile = document.getElementById('user-profile');
+            const userDropdown = document.getElementById('user-dropdown');
+            
+            if (!userProfile || !userDropdown) return;
+            
+            // Toggle dropdown on profile click
+            userProfile.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isOpen = userDropdown.classList.contains('show');
+                
+                if (isOpen) {
+                    closeDropdown();
+                } else {
+                    openDropdown();
+                }
+            });
+            
+            // Handle dropdown item clicks
+            const dropdownItems = userDropdown.querySelectorAll('.dropdown-item[data-route]');
+            dropdownItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const route = this.getAttribute('data-route');
+                    if (route) {
+                        // Navigate to the route
+                        window.location.hash = `#/${route}`;
+                        closeDropdown();
+                    }
+                });
+            });
+            
+            // Handle dropdown logout
+            const dropdownLogout = document.getElementById('dropdown-logout-btn');
+            if (dropdownLogout) {
+                dropdownLogout.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (confirm('Are you sure you want to logout?')) {
+                        sessionStorage.clear();
+                        localStorage.removeItem('userToken');
+                        localStorage.removeItem('userUser');
+                        localStorage.removeItem('adminToken');
+                        localStorage.removeItem('adminUser');
+                        localStorage.removeItem('isLoggedIn');
+                        window.location.href = 'login.html';
+                    }
+                    closeDropdown();
+                });
+            }
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!userProfile.contains(e.target) && !userDropdown.contains(e.target)) {
+                    closeDropdown();
+                }
+            });
+            
+            // Close dropdown on escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeDropdown();
+                }
+            });
+            
+            function openDropdown() {
+                userDropdown.classList.add('show');
+                userProfile.classList.add('active');
+            }
+            
+            function closeDropdown() {
+                userDropdown.classList.remove('show');
+                userProfile.classList.remove('active');
+            }
+        }
+        
+        // Initialize dropdown after DOM is loaded
+        initializeNavbarDropdown();
+
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        function showProfileMessage(message, type) {
+            // Remove existing message
+            const existingMessage = document.querySelector('.profile-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            // Create new message
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `profile-message profile-message-${type}`;
+            messageDiv.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                ${message}
+            `;
+            
+            // Add styles
+            messageDiv.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                padding: 1rem 1.5rem;
+                background: ${type === 'success' ? '#d4edda' : type === 'error' ? '#f8d7da' : '#d1ecf1'};
+                color: ${type === 'success' ? '#155724' : type === 'error' ? '#721c24' : '#0c5460'};
+                border: 1px solid ${type === 'success' ? '#c3e6cb' : type === 'error' ? '#f5c6cb' : '#bee5eb'};
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-weight: 500;
+            `;
+            
+            document.body.appendChild(messageDiv);
+            
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.style.animation = 'slideOut 0.3s ease';
+                    setTimeout(() => messageDiv.remove(), 300);
+                }
+            }, 4000);
+        }
+
+        // Add animation styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
     <script src="script.js"></script>
     <script src="navbar.js"></script>
